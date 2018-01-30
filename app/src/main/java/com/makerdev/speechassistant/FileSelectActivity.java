@@ -131,6 +131,7 @@ public class FileSelectActivity extends AppCompatActivity {
         }
     }
 
+    //TODO: 아예 처음부터 지원하는 확장자의 파일을 다 검색해서 표시하는 것도 가능
     void refreshFiles(){
         mCurrentTxt.setText(mCurrent);//현재 PATH를 가져옴
         arFiles.clear();//배열리스트를 지움

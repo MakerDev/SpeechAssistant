@@ -11,6 +11,8 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".IntroActivity"/>
+        <activity android:name=".OptionActivity"/>
+
         <activity android:name=".FileSelectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
