@@ -1,45 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_width="387dp"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="top"
-            android:paddingTop="24dp">
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="40dp"
+            android:visibility="visible">
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switchCheckPassed"
-                android:layout_gravity="left"
-                android:layout_marginLeft="25dp"
+            <TextView
+                android:id="@+id/output_numToShow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="이전 내용도 검색하기      "
-                android:textSize="18sp" />
+                android:layout_marginRight="20dp"
+                android:text="표시할 줄의 수 : 5"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-
-            <EditText
-                android:enabled="false"
-                android:layout_marginRight="25dp"
-                android:inputType="numberSigned"
-                android:digits="1"
-                android:layout_gravity="right"
-                android:layout_width="match_parent"
+            <Button
+                android:onClick="OnClickButton"
+                android:id="@+id/btn_numToShowUp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="7"/>
+                android:text="+" />
+
+            <Button
+                android:onClick="OnClickButton"
+                android:id="@+id/btn_numToShowDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-" />
 
         </LinearLayout>
 
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/switchCheckPassed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:onClick="OnClickButton"
+            android:layout_marginLeft="25dp"
+            android:text="이전 내용도 검색하기    "
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/PassedSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/output_numToLookAgain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="살펴볼 줄의 수 : 7"
+                android:textSize="18sp" />
+
+            <Button
+                android:onClick="OnClickButton"
+                android:id="@+id/btn_numPassedUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+" />
+
+            <Button
+                android:onClick="OnClickButton"
+                android:id="@+id/btn_numPassedDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-" />
+
+        </LinearLayout>
+
+        <Button
+            android:onClick="OnClickButton"
+            android:id="@+id/btn_saveOption"
+            android:layout_marginTop="70dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="옵션 저장" />
+
+
     </LinearLayout>
 
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

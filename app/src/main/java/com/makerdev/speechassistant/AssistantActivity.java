@@ -34,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 public class AssistantActivity extends AppCompatActivity implements ConversionCallaback {
-    public static int numberOfLinesToShow = 5;
-
     private static final int STT = 1;
     private static int CURRENT_MODE = -1;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
@@ -55,8 +53,6 @@ public class AssistantActivity extends AppCompatActivity implements ConversionCa
     private List<String> contents = new ArrayList<>();
     private int numOfContentLines = 0;
     private int currentLineIdx = 0;
-
-    private boolean isCheckPassedContents = true; //지나간 내용도 체크하는지 여부
 
     private String filePath = null;
 
@@ -100,8 +96,6 @@ public class AssistantActivity extends AppCompatActivity implements ConversionCa
 
             bufferedReader.close();
             fr.close();
-
-            SetContentsByInflater(currentLineIdx);
         }
         catch(Exception e)
         {
@@ -131,12 +125,15 @@ public class AssistantActivity extends AppCompatActivity implements ConversionCa
         ReadFileFromStorage();
         numOfContentLines = contents.size();
 
+        SetContentsByInflater(currentLineIdx);
         //Listen and convert convert speech to text
         speechToText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!isContinueRecognition)
                 {
+                    //TODO : 현재 인식이 끝나지 않았으면 끝날때까지 기다렸다가 시작
+
                     StartSTT();
                     speechToText.setText("인식중단");
                 }
@@ -168,7 +165,6 @@ public class AssistantActivity extends AppCompatActivity implements ConversionCa
         CURRENT_MODE = STT;
     }
 
-    //TODO 옵션에 따라 이미 지나간 문장들도 살펴보기
     //returns the best similar sentences's idx
     private int FindMostSimilarSentence(String said, int startIdx)
     {
@@ -176,6 +172,13 @@ public class AssistantActivity extends AppCompatActivity implements ConversionCa
         double bestSimilarity = 0.0;
 
         int count = startIdx + 10;
+
+        if(OptionInformation.GetIsCheckPassedLines())
+        {
+            startIdx -= OptionInformation.GetNumOfLinesToCheckAgain();
+
+            startIdx = (startIdx<0)?0:startIdx;
+        }
 
         if(count > numOfContentLines)
         {
@@ -198,7 +201,7 @@ public class AssistantActivity extends AppCompatActivity implements ConversionCa
         output.setText(String.valueOf(bestSimilarity));
 
         //TODO:임계값 정확히 설정하기
-        if(bestSimilarity <= 0.35)
+        if(bestSimilarity <= 0.33)
             bestIdx = -1;
 
         return bestIdx;
@@ -233,17 +236,18 @@ public class AssistantActivity extends AppCompatActivity implements ConversionCa
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         contentView.removeAllViewsInLayout();
 
-        //TODO 나중에 numOFLinesToShow로 보여줄 문장 개수 정하게 하기
-        int startIdx = currentIdx-2;
-        int endIdx = startIdx + numberOfLinesToShow;
-
-        endIdx = (endIdx>numOfContentLines)?numOfContentLines:endIdx;
+        int startIdx = currentIdx-OptionInformation.GetNumOfLinesToShow()/2;
+        int endIdx = startIdx + OptionInformation.GetNumOfLinesToShow();
 
         if(startIdx<=0)
         {
             startIdx = 0;
-            endIdx = startIdx+numberOfLinesToShow;
+            endIdx = startIdx+OptionInformation.GetNumOfLinesToShow();
         }
+
+        endIdx = (endIdx>numOfContentLines)?numOfContentLines:endIdx;
+
+
 
         for(int i=startIdx ; i<endIdx ; i++)
         {
@@ -270,10 +274,10 @@ public class AssistantActivity extends AppCompatActivity implements ConversionCa
                 int idx;
                 int startIdx = currentLineIdx;
 
-                if(isCheckPassedContents)
+                if(OptionInformation.GetIsCheckPassedLines())
                 {
                     //TODO : 최대 몇 줄까지 돌아볼지 정할 옵션 만들기
-                    for(int i=1 ; i<6 ; i++)
+                    for(int i=1 ; i<OptionInformation.GetNumOfLinesToCheckAgain() ; i++)
                     {
                             if(startIdx - i <= 0)
                             {
